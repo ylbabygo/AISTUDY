@@ -1,0 +1,5 @@
+export { default as Dashboard } from './Dashboard.vue'
+export { default as Projects } from './Projects.vue'
+export { default as Kanban } from './Kanban.vue'
+export { default as Gantt } from './Gantt.vue'
+export { default as ProjectDetail } from './ProjectDetail.vue'

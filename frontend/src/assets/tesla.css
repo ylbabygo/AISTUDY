@@ -1,0 +1,637 @@
+/******************************************
+ * Apple风格主题样式
+ * 简洁优雅UI设计
+ ******************************************/
+
+:root {
+  /* Apple风格主色调 - 协调优化 */
+  --primary-color: #007aff;
+  --primary-hover: #0056cc;
+  --primary-active: #004499;
+  --secondary-color: #8e8e93;
+  --accent-color: #34c759;
+  
+  /* Apple简洁背景 - 温暖协调 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f2f2f7;
+  --bg-tertiary: #e5e5ea;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-glass: rgba(255, 255, 255, 0.8);
+  
+  /* Apple优雅边框 - 协调分隔 */
+  --border-light: 1px solid rgba(0, 0, 0, 0.06);
+  --border-medium: 1px solid rgba(0, 0, 0, 0.1);
+  --border-glow: 1px solid #007aff;
+  --border-radius: 12px;
+  --border-radius-small: 8px;
+  
+  /* Apple渐变背景 - 和谐配色 */
+  --tech-gradient: linear-gradient(135deg, #ffffff 0%, #f2f2f7 100%);
+  --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(242, 242, 247, 0.9) 100%);
+  --neon-gradient: linear-gradient(45deg, #007aff, #5856d6, #34c759);
+  
+  /* Apple柔和阴影 - 自然深度 */
+  --shadow-small: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-large: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 6px 24px rgba(0, 0, 0, 0.12);
+  --glow-cyan: 0 0 20px rgba(0, 122, 255, 0.15);
+  --glow-magenta: 0 0 20px rgba(88, 86, 214, 0.15);
+  --glow-green: 0 0 20px rgba(52, 199, 89, 0.15);
+  
+  /* Apple文字颜色 - 协调对比 */
+  --text-primary: #000000;
+  --text-secondary: #6d6d70;
+  --text-tertiary: #8e8e93;
+  --text-accent: #007aff;
+  --text-neon: #5856d6;
+  
+  /* Apple状态颜色 - 协调系统 */
+  --status-todo: #8e8e93;
+  --status-progress: #007aff;
+  --status-done: #34c759;
+  --status-high: #ff3b30;
+  --status-medium: #ff9500;
+  --status-low: #34c759;
+}
+
+/* 暗色主题 */
+.dark {
+  /* 暗色主色调 */
+  --primary-color: #0a84ff;
+  --primary-hover: #409cff;
+  --primary-active: #0056cc;
+  --secondary-color: #8e8e93;
+  --accent-color: #30d158;
+  
+  /* 暗色背景 */
+  --bg-primary: #000000;
+  --bg-secondary: #1c1c1e;
+  --bg-tertiary: #2c2c2e;
+  --bg-card: rgba(28, 28, 30, 0.9);
+  --bg-glass: rgba(28, 28, 30, 0.8);
+  
+  /* 暗色边框 */
+  --border-light: 1px solid rgba(255, 255, 255, 0.06);
+  --border-medium: 1px solid rgba(255, 255, 255, 0.1);
+  --border-glow: 1px solid #0a84ff;
+  
+  /* 暗色渐变 */
+  --tech-gradient: linear-gradient(135deg, #000000 0%, #1c1c1e 100%);
+  --card-gradient: linear-gradient(135deg, rgba(28, 28, 30, 0.95) 0%, rgba(44, 44, 46, 0.9) 100%);
+  --neon-gradient: linear-gradient(45deg, #0a84ff, #5e5ce6, #30d158);
+  
+  /* 暗色阴影 */
+  --shadow-small: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-large: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 6px 24px rgba(0, 0, 0, 0.6);
+  --glow-cyan: 0 0 20px rgba(10, 132, 255, 0.3);
+  --glow-magenta: 0 0 20px rgba(94, 92, 230, 0.3);
+  --glow-green: 0 0 20px rgba(48, 209, 88, 0.3);
+  
+  /* 暗色文字 */
+  --text-primary: #ffffff;
+  --text-secondary: #98989d;
+  --text-tertiary: #636366;
+  --text-accent: #0a84ff;
+  --text-neon: #5e5ce6;
+  
+  /* 暗色状态 */
+  --status-todo: #8e8e93;
+  --status-progress: #0a84ff;
+  --status-done: #30d158;
+  --status-high: #ff453a;
+  --status-medium: #ff9f0a;
+  --status-low: #30d158;
+}
+
+/******************************************
+ * 基础样式重置
+ ******************************************/
+* {
+  box-sizing: border-box;
+}
+
+/* Apple风格全局样式 */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.47059;
+  font-weight: 400;
+  letter-spacing: -0.022em;
+  overflow-x: hidden;
+  position: relative;
+  font-size: 17px;
+}
+
+/* 科技感背景动画 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
+  animation: techPulse 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes techPulse {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.7; }
+}
+
+/******************************************
+ * Apple风格卡片样式
+ ******************************************/
+.glass-card {
+  background: var(--card-gradient);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+  font-weight: 400;
+  letter-spacing: -0.022em;
+  font-size: 1rem;
+  line-height: 1.47059;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-medium);
+}
+
+.glass-card-header {
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: -0.022em;
+}
+
+/******************************************
+ * Apple风格按钮样式
+ ******************************************/
+.tesla-btn {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  letter-spacing: -0.022em;
+  box-shadow: var(--shadow-small);
+  position: relative;
+  overflow: hidden;
+}
+
+.tesla-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+.tesla-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-small);
+}
+
+.tesla-btn-primary {
+  background: var(--primary-color);
+  color: var(--bg-primary);
+  border: 1px solid var(--primary-color);
+}
+
+.tesla-btn-primary:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.tesla-btn-success {
+  background: var(--accent-color);
+  color: white;
+  border: 1px solid var(--accent-color);
+  box-shadow: var(--shadow-small);
+}
+
+.tesla-btn-success:hover {
+  background: #2fb344;
+  border-color: #2fb344;
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+.tesla-btn-danger {
+  background: var(--status-high);
+  color: white;
+  border: 1px solid var(--status-high);
+  box-shadow: var(--shadow-small);
+}
+
+.tesla-btn-danger:hover {
+  background: #d70015;
+  border-color: #d70015;
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+/******************************************
+ * Apple风格输入框样式
+ ******************************************/
+.tesla-input {
+  background: var(--bg-primary);
+  border: var(--border-light);
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  width: 100%;
+  box-sizing: border-box;
+  letter-spacing: -0.022em;
+  font-weight: 400;
+  position: relative;
+  box-shadow: var(--shadow-small);
+}
+
+.tesla-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+  background: var(--bg-primary);
+}
+
+.tesla-input::placeholder {
+  color: var(--text-tertiary);
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+
+/******************************************
+ * Apple风格状态标签样式
+ ******************************************/
+.status-badge {
+  padding: 0.375rem 0.875rem;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  letter-spacing: -0.022em;
+  min-width: 80px;
+  cursor: pointer;
+  box-shadow: var(--shadow-small);
+}
+
+.status-todo {
+  background: rgba(142, 142, 147, 0.1);
+  color: var(--status-todo);
+  border-color: rgba(142, 142, 147, 0.2);
+}
+
+.status-progress {
+  background: rgba(0, 122, 255, 0.1);
+  color: var(--status-progress);
+  border-color: rgba(0, 122, 255, 0.2);
+}
+
+.status-done {
+  background: rgba(52, 199, 89, 0.1);
+  color: var(--status-done);
+  border-color: rgba(52, 199, 89, 0.2);
+}
+
+/******************************************
+ * 优先级标签样式
+ ******************************************/
+.priority-high {
+  border-left: 4px solid var(--status-high);
+}
+
+.priority-medium {
+  border-left: 4px solid var(--status-medium);
+}
+
+.priority-low {
+  border-left: 4px solid var(--status-low);
+}
+
+/******************************************
+ * 动画效果
+ ******************************************/
+@keyframes neon-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-neon {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/******************************************
+ * Apple风格滚动条样式
+ ******************************************/
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/******************************************
+ * Apple风格加载动画
+ ******************************************/
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top: 2px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg);
+  }
+}
+
+/* Apple风格标题样式 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  line-height: 1.08349;
+  letter-spacing: -0.003em;
+  position: relative;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.004em;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.003em;
+  color: var(--text-primary);
+}
+
+/* Apple风格动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/******************************************
+ * Apple风格工具类
+ ******************************************/
+.text-accent {
+  color: var(--primary-color);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.border-light {
+  border: var(--border-light);
+}
+
+.shadow-small {
+  box-shadow: var(--shadow-small);
+}
+
+.shadow-medium {
+  box-shadow: var(--shadow-medium);
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Apple风格渐变文字 */
+.gradient-text {
+  background: var(--neon-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+
+/* Apple风格轻微脉冲效果 */
+.pulse-subtle {
+  animation: pulseSubtle 2s ease-in-out infinite;
+}
+
+@keyframes pulseSubtle {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* Apple风格响应式设计 */
+@media (max-width: 768px) {
+  .glass-card {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    border-width: 1px;
+  }
+  
+  .glass-card-header {
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  
+  .tesla-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.9rem;
+    border-width: 1px;
+  }
+  
+  .tesla-input {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.9rem;
+    border-width: 1px;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+  }
+  
+  h3 {
+    font-size: 1.375rem;
+  }
+}
+
+/* Apple风格辅助类 */
+.text-large {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+  letter-spacing: -0.022em;
+}
+
+.text-medium {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  letter-spacing: -0.022em;
+}
+
+.text-small {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  letter-spacing: -0.016em;
+}
+
+.bg-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: var(--bg-glass);
+}
+
+.rounded {
+  border-radius: var(--border-radius);
+}
+
+.rounded-small {
+  border-radius: var(--border-radius-small);
+}
+
+.subtle-highlight {
+  background: linear-gradient(45deg, transparent 30%, rgba(0, 122, 255, 0.05) 50%, transparent 70%);
+}
