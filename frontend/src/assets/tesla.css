@@ -123,12 +123,10 @@ body {
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
-  line-height: 1.47059;
+  line-height: 1.6;
   font-weight: 400;
-  letter-spacing: -0.022em;
   overflow-x: hidden;
   position: relative;
-  font-size: 17px;
 }
 
 /* 科技感背景动画 */
@@ -634,4 +632,75 @@ h3 {
 
 .subtle-highlight {
   background: linear-gradient(45deg, transparent 30%, rgba(0, 122, 255, 0.05) 50%, transparent 70%);
+}
+
+
+
+/* 字体动画 */
+@keyframes tesla-text-glow {
+  0% {
+    text-shadow: 
+      0 0 5px rgba(0, 212, 255, 0.5),
+      0 0 10px rgba(0, 212, 255, 0.3),
+      0 0 15px rgba(0, 212, 255, 0.2);
+  }
+  100% {
+    text-shadow: 
+      0 0 8px rgba(0, 212, 255, 0.8),
+      0 0 15px rgba(0, 212, 255, 0.5),
+      0 0 20px rgba(0, 212, 255, 0.3);
+  }
+}
+
+@keyframes tesla-glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    transform: translate(-1px, -1px);
+  }
+  60% {
+    transform: translate(1px, 1px);
+  }
+  80% {
+    transform: translate(1px, -1px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+/* 可访问性优化 */
+@media (prefers-reduced-motion: reduce) {
+  .tesla-glow-text,
+  .tesla-cyber-text::before {
+    animation: none !important;
+  }
+  
+  .tesla-heading-1,
+  h1.tesla {
+    text-shadow: none;
+    background: none;
+    -webkit-text-fill-color: var(--text-primary);
+    color: var(--text-primary);
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .tesla-heading-1,
+  h1.tesla,
+  .tesla-emphasis,
+  .tesla-highlight,
+  .tesla-number,
+  .tesla-glow-text,
+  .tesla-cyber-text {
+    color: var(--text-primary) !important;
+    text-shadow: none !important;
+    background: none !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+  }
 }

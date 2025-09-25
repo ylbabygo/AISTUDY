@@ -3,15 +3,21 @@
     <!-- 移动端遮罩层 -->
     <div 
       v-if="isMobile && !collapsed"
-      class="fixed inset-0 bg-black/50 z-40 md:hidden"
+      class="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
       @click="collapsed = true"
     ></div>
     
-    <div class="aceternity-sidebar" :class="{ 'sidebar-collapsed': collapsed }" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+    <div class="sidebar" :class="{ 'sidebar-collapsed': collapsed }" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
     <!-- 侧边栏背景 -->
     <div class="sidebar-background">
       <SidebarAnimations />
+      <!-- 渐变背景 -->
       <div class="sidebar-gradient"></div>
+      <!-- 网格背景 -->
+      <div class="sidebar-grid"></div>
+      <!-- 光晕效果 -->
+      <div class="sidebar-glow"></div>
+      <!-- 噪点纹理 -->
       <div class="sidebar-noise"></div>
     </div>
 
@@ -21,20 +27,28 @@
       <div class="sidebar-header">
         <div class="logo-container" @click="toggleSidebar">
           <div class="logo-icon">
+            <!-- Logo -->
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path 
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
+                d="M12 2L2 7v10c0 5.55 3.84 7.74 9 9 5.16-1.26 9-3.45 9-9V7l-10-5z" 
                 stroke="currentColor" 
-                stroke-width="2" 
+                stroke-width="1.5" 
                 stroke-linecap="round" 
                 stroke-linejoin="round"
+                fill="url(#logoGradient)"
               />
+              <defs>
+                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                </linearGradient>
+              </defs>
             </svg>
           </div>
           <Transition name="fade-slide">
             <div v-if="!collapsed" class="logo-text">
-              <h1 class="logo-title">TaskFlow</h1>
-              <span class="logo-subtitle">Project Management</span>
+              <h1 class="logo-title">项目管理</h1>
+              <span class="logo-subtitle">管理系统</span>
             </div>
           </Transition>
         </div>
@@ -60,7 +74,10 @@
       <!-- 导航菜单 -->
       <nav class="sidebar-nav">
         <div class="nav-section">
-          <div v-if="!collapsed" class="nav-section-title">主要功能</div>
+          <div v-if="!collapsed" class="nav-section-title">
+            <span class="section-text">主要功能</span>
+            <div class="section-line"></div>
+          </div>
           <div class="nav-items">
             <router-link 
               v-for="item in mainNavItems" 
@@ -72,6 +89,7 @@
               @mouseenter="(e) => handleMouseEnter(item, e)"
               @mouseleave="handleMouseLeave"
             >
+              <div class="nav-item-background"></div>
               <div class="nav-item-icon">
                 <component :is="item.icon" />
               </div>
@@ -82,12 +100,16 @@
                 </div>
               </Transition>
               <div class="nav-item-indicator"></div>
+              <div class="nav-item-glow"></div>
             </router-link>
           </div>
         </div>
 
         <div class="nav-section">
-          <div v-if="!collapsed" class="nav-section-title">工具</div>
+          <div v-if="!collapsed" class="nav-section-title">
+            <span class="section-text">工具</span>
+            <div class="section-line"></div>
+          </div>
           <div class="nav-items">
             <router-link 
               v-for="item in toolNavItems" 
@@ -99,6 +121,7 @@
               @mouseenter="(e) => handleMouseEnter(item, e)"
               @mouseleave="handleMouseLeave"
             >
+              <div class="nav-item-background"></div>
               <div class="nav-item-icon">
                 <component :is="item.icon" />
               </div>
@@ -109,46 +132,56 @@
                 </div>
               </Transition>
               <div class="nav-item-indicator"></div>
+              <div class="nav-item-glow"></div>
             </router-link>
           </div>
         </div>
       </nav>
 
-      <!-- 底部区域 -->
-      <div class="sidebar-footer">
-        <!-- 主题切换 -->
-        <div class="footer-item" @click="toggleTheme">
-          <div class="footer-item-icon">
-            <svg v-if="isDark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <svg v-else viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <Transition name="fade-slide">
-            <span v-if="!collapsed" class="footer-item-label">
-              {{ isDark ? '浅色模式' : '深色模式' }}
-            </span>
-          </Transition>
-        </div>
+      <!-- Tesla Footer -->
+      <div class="tesla-footer p-4 border-t border-white/10 space-y-4">
+        <!-- Tesla Theme Toggle -->
+        <button 
+          @click="$emit('toggle-theme')"
+          class="tesla-theme-toggle w-full flex items-center justify-center px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300 group"
+        >
+          <Icon name="heroicons:sun" class="w-5 h-5 text-white group-hover:rotate-180 transition-transform duration-500" />
+          <span v-if="isOpen" class="ml-3 text-sm font-medium text-white">能源模式</span>
+        </button>
 
-        <!-- 用户信息 -->
-        <div class="user-section" @click="showUserMenu = !showUserMenu">
-          <div class="user-avatar">
-            <img :src="userAvatar" :alt="userName" />
-          </div>
-          <Transition name="fade-slide">
-            <div v-if="!collapsed" class="user-info">
-              <div class="user-name">{{ userName }}</div>
-              <div class="user-role">{{ userRole }}</div>
+        <!-- Tesla User Section -->
+        <div class="tesla-user-section relative">
+          <button 
+            @click="showUserMenu = !showUserMenu"
+            class="tesla-user-btn w-full flex items-center px-3 py-2.5 rounded-lg hover:bg-white/10 transition-all duration-300 group"
+          >
+            <div class="tesla-avatar w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+              <Icon name="heroicons:user" class="w-4 h-4 text-white" />
             </div>
-          </Transition>
-          <Transition name="fade-slide">
-            <div v-if="!collapsed" class="user-menu-icon">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+            <div v-if="isOpen" class="tesla-user-info ml-3 flex-1 text-left">
+              <p class="tesla-user-name text-sm font-medium text-white">Tesla User</p>
+              <p class="tesla-user-role text-xs text-white/70">System Admin</p>
+            </div>
+            <Icon v-if="isOpen" name="heroicons:chevron-up" 
+                  :class="['w-4 h-4 text-white/70 transition-transform duration-300', showUserMenu ? 'rotate-180' : '']" />
+          </button>
+
+          <!-- Tesla User Menu -->
+          <Transition name="slide-up">
+            <div v-if="showUserMenu && isOpen" class="tesla-user-menu absolute bottom-full left-0 right-0 mb-2 bg-black/80 backdrop-blur-xl border border-white/20 rounded-lg p-2 shadow-2xl">
+              <a href="#" class="tesla-menu-item flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-sm text-white">
+                <Icon name="heroicons:user-circle" class="w-4 h-4 mr-3" />
+                个人资料
+              </a>
+              <a href="#" class="tesla-menu-item flex items-center px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-sm text-white">
+                <Icon name="heroicons:cog-6-tooth" class="w-4 h-4 mr-3" />
+                系统设置
+              </a>
+              <hr class="my-2 border-white/10">
+              <a href="#" class="tesla-menu-item flex items-center px-3 py-2 rounded-lg hover:bg-red-500/20 transition-colors text-sm text-red-400">
+                <Icon name="heroicons:arrow-right-on-rectangle" class="w-4 h-4 mr-3" />
+                退出登录
+              </a>
             </div>
           </Transition>
         </div>
@@ -157,20 +190,20 @@
 
     <!-- 用户菜单弹出层 -->
     <Transition name="slide-up">
-      <div v-if="showUserMenu && !collapsed" class="user-menu">
+      <div v-if="showUserMenu && !collapsed" class="user-menu tesla-menu">
         <div class="user-menu-item" @click="handleProfile">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          个人资料
+          个人档案
         </div>
         <div class="user-menu-item" @click="handleSettings">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          设置
+          系统设置
         </div>
         <div class="user-menu-divider"></div>
         <div class="user-menu-item danger" @click="handleLogout">
@@ -179,7 +212,7 @@
             <polyline points="16,17 21,12 16,7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          退出登录
+          安全退出
         </div>
       </div>
     </Transition>
@@ -188,7 +221,7 @@
     <Transition name="fade">
       <div 
         v-if="collapsed && hoveredItem" 
-        class="sidebar-tooltip"
+        class="sidebar-tooltip tesla-tooltip"
         :style="tooltipStyle"
       >
         {{ hoveredItem.label }}
@@ -387,7 +420,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.aceternity-sidebar {
+.sidebar {
   position: fixed;
   top: 0;
   left: 0;
@@ -438,47 +471,87 @@ onUnmounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem 1rem;
+  padding: 2rem 1.5rem;
+  z-index: 10;
 }
 
-/* Header */
+/* Tesla Header 设计 */
 .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+  position: relative;
+}
+
+.sidebar-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #00d4ff, transparent);
+  animation: header-glow 3s ease-in-out infinite;
 }
 
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
 }
 
 .logo-container:hover {
-  transform: translateX(2px);
+  transform: translateX(4px);
+}
+
+.logo-container:hover .logo-icon {
+  box-shadow: 
+    0 0 20px rgba(0, 212, 255, 0.4),
+    0 0 40px rgba(0, 212, 255, 0.2),
+    inset 0 0 20px rgba(0, 212, 255, 0.1);
 }
 
 .logo-icon {
-  width: 2rem;
-  height: 2rem;
-  color: #3b82f6;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  border-radius: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: 
+    linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #006699 100%);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 212, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.logo-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.logo-container:hover .logo-icon::before {
+  transform: translateX(100%);
 }
 
 .logo-icon svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
   color: white;
+  filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.5));
 }
 
 .logo-text {
@@ -487,36 +560,47 @@ onUnmounted(() => {
 }
 
 .logo-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: white;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
   margin: 0;
   line-height: 1.2;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #00d4ff 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
 }
 
 .logo-subtitle {
   font-size: 0.75rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: rgba(0, 212, 255, 0.7);
   font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .collapse-button {
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background: rgba(148, 163, 184, 0.1);
-  color: rgba(148, 163, 184, 0.8);
-  border-radius: 0.375rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: rgba(0, 212, 255, 0.05);
+  color: rgba(0, 212, 255, 0.8);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .collapse-button:hover {
-  background: rgba(148, 163, 184, 0.2);
-  color: white;
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.4);
+  color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
 }
 
 .collapse-button.collapsed {
@@ -524,91 +608,137 @@ onUnmounted(() => {
 }
 
 .collapse-button svg {
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
 }
 
-/* Navigation */
+/* Tesla Navigation 设计 */
 .sidebar-nav {
   flex: 1;
   overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+  padding-right: 4px;
 }
 
 .sidebar-nav::-webkit-scrollbar {
-  display: none;
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.3);
+  border-radius: 2px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 212, 255, 0.5);
 }
 
 .nav-section {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .nav-section-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+
+.section-text {
   font-size: 0.75rem;
-  font-weight: 600;
-  color: rgba(148, 163, 184, 0.6);
+  font-weight: 700;
+  color: rgba(0, 212, 255, 0.6);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-  padding: 0 0.75rem;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.3), transparent);
 }
 
 .nav-items {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .nav-item {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
   text-decoration: none;
-  color: rgba(148, 163, 184, 0.8);
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   font-size: 0.875rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: hidden;
+  border: 1px solid transparent;
 }
 
-.nav-item::before {
-  content: '';
+.nav-item-background {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(0, 153, 204, 0.05));
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 
-.nav-item:hover {
-  color: white;
-  transform: translateX(4px);
-}
-
-.nav-item:hover::before {
+.nav-item:hover .nav-item-background {
   opacity: 1;
 }
 
-.nav-item-active {
-  color: white;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
-  border: 1px solid rgba(59, 130, 246, 0.3);
+.nav-item:hover {
+  color: #ffffff;
+  transform: translateX(6px);
+  border-color: rgba(0, 212, 255, 0.2);
+  box-shadow: 
+    0 4px 20px rgba(0, 212, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.nav-item-active::before {
+.nav-item-active {
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 153, 204, 0.1));
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 212, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.nav-item-active .nav-item-background {
   opacity: 1;
 }
 
 .nav-item-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover .nav-item-icon {
+  color: #00d4ff;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+}
+
+.nav-item-active .nav-item-icon {
+  color: #00d4ff;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
 }
 
 .nav-item-content {
@@ -622,18 +752,23 @@ onUnmounted(() => {
 
 .nav-item-label {
   flex: 1;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .nav-item-badge {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.375rem;
-  min-width: 1.25rem;
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  color: #000000;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  min-width: 1.5rem;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+  box-shadow: 
+    0 2px 8px rgba(0, 212, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: badge-pulse 2s ease-in-out infinite;
 }
 
 .nav-item-indicator {
@@ -641,77 +776,147 @@ onUnmounted(() => {
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 3px;
+  width: 4px;
   height: 0;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
   border-radius: 0 2px 2px 0;
-  transition: height 0.2s ease;
+  transition: height 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
 .nav-item-active .nav-item-indicator {
-  height: 60%;
+  height: 70%;
 }
 
-/* Footer */
+.nav-item-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-item:hover .nav-item-glow {
+  opacity: 1;
+}
+
+/* Tesla Footer 设计 */
 .sidebar-footer {
   margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 212, 255, 0.1);
+  position: relative;
+}
+
+.sidebar-footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #00d4ff, transparent);
+  animation: footer-glow 3s ease-in-out infinite reverse;
+}
+
+.tesla-button {
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  backdrop-filter: blur(10px);
+  margin-bottom: 1rem;
+}
+
+.tesla-button:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
 }
 
 .footer-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
   cursor: pointer;
-  color: rgba(148, 163, 184, 0.8);
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   font-size: 0.875rem;
-  transition: all 0.2s ease;
-  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
 }
 
 .footer-item:hover {
-  color: white;
-  background: rgba(148, 163, 184, 0.1);
+  color: #ffffff;
+  transform: translateX(4px);
 }
 
 .footer-item-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: all 0.3s ease;
 }
 
-.user-section {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: rgba(148, 163, 184, 0.05);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+.footer-item:hover .footer-item-icon {
+  color: #00d4ff;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
 }
 
-.user-section:hover {
-  background: rgba(148, 163, 184, 0.1);
-  border-color: rgba(148, 163, 184, 0.2);
+/* Tesla User Section */
+.tesla-user {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 153, 204, 0.05));
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.tesla-user::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.05) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.tesla-user:hover::before {
+  transform: translateX(100%);
+}
+
+.tesla-user:hover {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.12), rgba(0, 153, 204, 0.08));
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
 }
 
 .user-avatar {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
+  position: relative;
+  border: 2px solid rgba(0, 212, 255, 0.3);
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00d4ff, #0099cc);
+  z-index: -1;
+  animation: avatar-pulse 3s ease-in-out infinite;
 }
 
 .user-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.tesla-user:hover .user-avatar img {
+  transform: scale(1.05);
 }
 
 .user-info {
@@ -722,126 +927,194 @@ onUnmounted(() => {
 .user-name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: white;
+  color: #ffffff;
   line-height: 1.2;
+  letter-spacing: 0.01em;
 }
 
 .user-role {
   font-size: 0.75rem;
-  color: rgba(148, 163, 184, 0.8);
+  color: rgba(0, 212, 255, 0.7);
   line-height: 1.2;
+  font-weight: 500;
 }
 
 .user-menu-icon {
-  width: 1rem;
-  height: 1rem;
-  color: rgba(148, 163, 184, 0.6);
-  transition: transform 0.2s ease;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: rgba(0, 212, 255, 0.6);
+  transition: all 0.3s ease;
 }
 
-.user-section:hover .user-menu-icon {
+.tesla-user:hover .user-menu-icon {
   transform: rotate(180deg);
+  color: #00d4ff;
 }
 
-/* User Menu */
-.user-menu {
+/* Tesla Menu */
+.tesla-menu {
   position: absolute;
-  bottom: 5rem;
-  left: 1rem;
-  right: 1rem;
-  background: rgba(15, 23, 42, 0.95);
+  bottom: 6rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(10, 10, 15, 0.9));
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 0.75rem;
-  padding: 0.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 16px;
+  padding: 0.75rem;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 212, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .user-menu-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
   cursor: pointer;
-  color: rgba(148, 163, 184, 0.8);
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   font-size: 0.875rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-menu-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 204, 0.05));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.user-menu-item:hover::before {
+  opacity: 1;
 }
 
 .user-menu-item:hover {
-  color: white;
-  background: rgba(148, 163, 184, 0.1);
+  color: #ffffff;
+  transform: translateX(4px);
 }
 
 .user-menu-item.danger:hover {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
+  color: #ff4444;
+}
+
+.user-menu-item.danger:hover::before {
+  background: linear-gradient(135deg, rgba(255, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
 }
 
 .user-menu-item svg {
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.user-menu-item:hover svg {
+  filter: drop-shadow(0 0 8px currentColor);
 }
 
 .user-menu-divider {
   height: 1px;
-  background: rgba(148, 163, 184, 0.1);
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
   margin: 0.5rem 0;
 }
 
-/* Tooltip */
-.sidebar-tooltip {
+/* Tesla Tooltip */
+.tesla-tooltip {
   position: fixed;
-  background: rgba(15, 23, 42, 0.95);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(10, 10, 15, 0.9));
   backdrop-filter: blur(20px);
-  color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(0, 212, 255, 0.1);
   z-index: 1001;
   pointer-events: none;
   white-space: nowrap;
+  letter-spacing: 0.01em;
 }
 
-/* Transitions */
+/* Tesla Animations */
+@keyframes tesla-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes grid-flow {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(20px, 20px); }
+}
+
+@keyframes glow-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes header-glow {
+  0%, 100% { opacity: 0.5; width: 60px; }
+  50% { opacity: 1; width: 120px; }
+}
+
+@keyframes footer-glow {
+  0%, 100% { opacity: 0.5; width: 60px; }
+  50% { opacity: 1; width: 120px; }
+}
+
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes avatar-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Enhanced Transitions */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .fade-slide-enter-from {
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(-20px);
 }
 
 .fade-slide-leave-to {
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(-20px);
 }
 
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .slide-up-enter-from {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(20px) scale(0.95);
 }
 
 .slide-up-leave-to {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(20px) scale(0.95);
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 
 .fade-enter-from,
@@ -849,16 +1122,16 @@ onUnmounted(() => {
   opacity: 0;
 }
 
-/* 响应式设计 */
+/* 响应式设计 - Tesla风格 */
 @media (max-width: 768px) {
-  .aceternity-sidebar {
+  .tesla-sidebar {
     width: 100%;
-    max-width: 280px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 320px;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
     transform: translateX(-100%);
   }
   
-  .aceternity-sidebar:not(.sidebar-collapsed) {
+  .tesla-sidebar:not(.sidebar-collapsed) {
     transform: translateX(0);
   }
   
@@ -867,51 +1140,84 @@ onUnmounted(() => {
   }
   
   .nav-item {
-    padding: 1rem;
+    padding: 1.25rem;
   }
   
   .nav-item-icon {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
   
-  .nav-item-text {
+  .nav-item-label {
     font-size: 1rem;
   }
 }
 
 /* 平板设备优化 */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .aceternity-sidebar {
-    width: 240px;
+  .tesla-sidebar {
+    width: 280px;
   }
   
   .sidebar-collapsed {
-    width: 60px;
+    width: 70px;
   }
 }
 
 /* 触摸设备优化 */
 @media (hover: none) and (pointer: coarse) {
   .nav-item:hover {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(0, 212, 255, 0.1);
   }
   
   .nav-item:active {
-    background: rgba(59, 130, 246, 0.2);
+    background: rgba(0, 212, 255, 0.2);
     transform: scale(0.98);
   }
 }
 
-/* 深色模式适配 */
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .sidebar-background {
+    background: #000000;
+    border-right: 2px solid #00d4ff;
+  }
+  
+  .nav-item {
+    border: 1px solid rgba(0, 212, 255, 0.3);
+  }
+  
+  .nav-item-active {
+    background: rgba(0, 212, 255, 0.3);
+    border-color: #00d4ff;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 深色模式增强 */
 @media (prefers-color-scheme: dark) {
   .sidebar-background {
     background: linear-gradient(
       135deg,
-      rgba(3, 7, 18, 0.95) 0%,
-      rgba(15, 23, 42, 0.95) 50%,
-      rgba(3, 7, 18, 0.95) 100%
+      rgba(0, 0, 0, 1) 0%,
+      rgba(5, 5, 10, 0.98) 30%,
+      rgba(10, 10, 20, 0.95) 70%,
+      rgba(0, 0, 0, 1) 100%
     );
+  }
+  
+  .tesla-gradient {
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(0, 153, 204, 0.08) 0%, transparent 50%);
   }
 }
 </style>

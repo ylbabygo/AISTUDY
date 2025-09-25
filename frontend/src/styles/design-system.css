@@ -206,6 +206,8 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
+
+
 .gradient-primary {
   background: var(--gradient-primary);
 }
